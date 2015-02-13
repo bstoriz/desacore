@@ -23,6 +23,20 @@ public class SpriteSheet {
 	public static SpriteSheet player_left = new SpriteSheet(player, 3, 0, 1, 3, 32);
 	public static SpriteSheet player_right = new SpriteSheet(player, 1, 0, 1, 3, 32);
 
+	public static SpriteSheet wiseMan = new SpriteSheet("/textures/wise_man_sprite_1.png", 128, 96);
+	public static SpriteSheet wiseMan_down = new SpriteSheet(wiseMan, 2, 0, 1, 3, 32);
+	public static SpriteSheet wiseMan_up = new SpriteSheet(wiseMan, 0, 0, 1, 3, 32);
+	public static SpriteSheet wiseMan_left = new SpriteSheet(wiseMan, 3, 0, 1, 3, 32);
+	public static SpriteSheet wiseMan_right = new SpriteSheet(wiseMan, 1, 0, 1, 3, 32);
+	
+	public static SpriteSheet bandit = new SpriteSheet("/textures/bandit_spritesheet_1.png", 128, 96);
+	public static SpriteSheet bandit_down = new SpriteSheet(bandit, 2, 0, 1, 3, 32);
+	public static SpriteSheet bandit_up = new SpriteSheet(bandit, 0, 0, 1, 3, 32);
+	public static SpriteSheet bandit_left = new SpriteSheet(bandit, 3, 0, 1, 3, 32);
+	public static SpriteSheet bandit_right = new SpriteSheet(bandit, 1, 0, 1, 3, 32);
+
+	
+	
 	private Sprite[] sprites;
 	
 	public SpriteSheet(SpriteSheet sheet, int x, int y, int width, int height, int spriteSize) {

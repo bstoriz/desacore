@@ -2,6 +2,7 @@ package pstoriz.desacore;
 
 import java.util.Random;
 
+import pstoriz.desacore.entity.mob.Mob;
 import pstoriz.desacore.entity.projectile.Projectile;
 import pstoriz.desacore.graphics.Sprite;
 import pstoriz.desacore.graphics.SpriteSheet;
@@ -111,7 +112,6 @@ public class Screen {
 		}
 	}
 	
-	
 	public void renderPlayer(int xp, int yp, Sprite sprite) {
 		xp -= xOffset;
 		yp -= yOffset;
@@ -126,6 +126,43 @@ public class Screen {
 				if (red) col = hue(col, 'r');
 				// renders the tile onto the screen
 				if (col != 0xffff00ff && col != 0xff00ff && showing) pixels[xa + ya * width] = col;
+			}
+		}
+	}
+	
+	public void renderMob(int xp, int yp, Sprite sprite) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < 32; y++) {
+			int ya = y + yp;
+			for (int x = 0; x < 32; x++) {
+				int xa = x + xp;
+				if (xa < -32 || xa >= width || ya < 0 || ya >= height)
+					break;
+				if (xa < 0) xa = 0;
+				int col = sprite.pixels[x + y * 32];
+				// renders the tile onto the screen
+				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
+			}
+		}
+	}
+	
+	public void renderMob(int xp, int yp, Mob mob) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < 32; y++) {
+			int ya = y + yp;
+			int ys = y;
+			for (int x = 0; x < 32; x++) {
+				int xa = x + xp;
+				int xs = x;
+				if (xa < -32 || xa >= width || ya < 0 || ya >= height)
+					break;
+				if (xa < 0) xa = 0;
+				int col = mob.getSprite().pixels[xs + ys * 32];
+				// if ((mob instanceof Bandit) && col == 0xff000000) col = 0xnewnew;
+				// renders the tile onto the screen
+				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
 			}
 		}
 	}

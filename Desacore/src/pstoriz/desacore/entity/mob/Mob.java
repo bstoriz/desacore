@@ -1,5 +1,6 @@
 package pstoriz.desacore.entity.mob;
 
+import pstoriz.desacore.Screen;
 import pstoriz.desacore.entity.Entity;
 import pstoriz.desacore.entity.projectile.FireDProjectile;
 import pstoriz.desacore.entity.projectile.Projectile;
@@ -13,6 +14,13 @@ public abstract class Mob extends Entity {
 	protected boolean harmful = false;
 	protected boolean slow = false;
 	protected boolean alive = true;
+	protected boolean walking = false;
+	
+	protected enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
+	
+	protected Direction direction;
 	
 	public final static int UP = 0;
 	public final static int RIGHT = 1;
@@ -23,7 +31,7 @@ public abstract class Mob extends Entity {
 	public boolean noReload = false;
 	
 	//x and y variables need to change when it moves
-	public void move(int xa, int ya) {
+	public void move(double xa, double ya) {
 		//Separates out which way you're colliding so you can slide
 		if (xa != 0 && ya != 0) {
 			//Runs its twice so that it will sort out and go the right way
@@ -32,51 +40,88 @@ public abstract class Mob extends Entity {
 			return;
 		}
 		//Decides which way the entity is facing
-		if (xa > 0) dir = RIGHT;
-		if (xa < 0) dir = LEFT;
-		if (ya > 0) dir = DOWN;
-		if (ya < 0) dir = UP;
-				
-		//as long as its not colliding, it will move
-		if (!collision(xa, ya)) {
-			x += xa;
-			y += ya;
+		if (xa > 0) {
+			dir = RIGHT;
+			direction = Direction.RIGHT;
+		}
+		if (xa < 0) {
+			dir = LEFT;
+			direction = Direction.LEFT;
+		}
+		if (ya > 0) {
+			dir = DOWN;
+			direction = Direction.DOWN;
+		}
+		if (ya < 0) {
+			dir = UP;
+			direction = Direction.UP;
+		}
+		
+		while (xa != 0) {
+			if (Math.abs(xa) > 1) {
+				// if xa is between 1 and 0
+				if (!collision(abs(xa), ya)) {
+					this.x += abs(xa);
+				}
+				xa -= abs(xa);
+			} else {
+				if (!collision(abs(xa), ya)) {
+					this.x += xa;
+				}
+				xa = 0;
+			}
+		}
+		
+		while (ya != 0) {
+			if (Math.abs(ya) > 1) {
+				// if xa is between 1 and 0
+				if (!collision(xa, abs(ya))) {
+					this.y += abs(ya);
+				}
+				ya -= abs(ya);
+			} else {
+				if (!collision(xa, abs(ya))) {
+					this.y += ya;
+				}
+				ya = 0;
+			}
 		}
 	}
 	
-	//Being overwritten by player
-	public void update() {
-		
+	private int abs(double value) {
+		if (value < 0) return -1;
+		return 1;
 	}
+		
+	//Abstract means it doesn't have to implement anything
+	public abstract void update();
 	
-	protected void playerShoot(int x, int y, int dir) {
+	public abstract void render(Screen screen);
+	
+	protected void playerShoot(double x, double y, int dir) {
 		Projectile p = new FireDProjectile(x, y, this.dir);
 		level.add(p);
 	}
 	
-	private boolean collision(int xa, int ya) {
+	private boolean collision(double xa, double ya) {
 		boolean solid = false;
 		//Collision detection for the corners
-		int w = 15;
-		int h = - 8;
 		for (int c = 0; c < 4; c++) {
 			harmful = false;
 			slow = false;
-			int xt = ((x + xa) + c % 2 * 27 - w) / 16;
-			int yt = ((y + ya) + c / 2 * 12 + h) / 16;
-			if (level.getTile(xt, yt).solid()) solid = true;
-			int xh = ((x + xa) + c % 2) / 16;
-			int yh = ((y + ya) + c / 2) / 16;
-			if (level.getTile(xh, yh).isHarmful()) harmful = true;
-			if (level.getTile(xh, yh).isSlow()) slow = true;
+			double xt = ((x + xa) - c % 2 * 16) / 16;
+			double yt = ((y + ya) - c / 2 * 16) / 16;
+			int ix = (int) Math.ceil(xt);
+			int iy = (int) Math.ceil(yt);
+			if (c % 2 == 0) ix --;
+			if (c / 2 == 0) iy --;
+			if (level.getTile(ix, iy).solid()) solid = true;
+			if (level.getTile(ix, iy).isHarmful()) harmful = true;
+			if (level.getTile(ix, iy).isSlow()) slow = true;
 
 		}
 		return solid;
 	}
 	
-	public void render() {
-		
-	}
-
 }
 

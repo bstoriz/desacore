@@ -1,15 +1,19 @@
 package pstoriz.desacore.level;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import pstoriz.desacore.Screen;
 import pstoriz.desacore.entity.Entity;
+import pstoriz.desacore.entity.mob.Player;
 import pstoriz.desacore.entity.particle.Particle;
 import pstoriz.desacore.entity.projectile.Projectile;
 import pstoriz.desacore.graphics.ImageLoader;
 import pstoriz.desacore.level.tile.Tile;
+import pstoriz.desacore.util.Vector2i;
 
 public class Level {
 
@@ -22,6 +26,17 @@ public class Level {
 	private List<Projectile> projectiles = new ArrayList<Projectile>();
 	private List<Particle> particles = new ArrayList<Particle>();
 
+	//Takes in two node objects and returns and integer
+	private Comparator<Node> nodeSorter = new Comparator<Node>() {
+		public int compare(Node n0, Node n1) {
+			//Move up or down in the array based off of comparing fcosts
+			if (n1.fCost < n0.fCost) return +1;
+			if (n1.fCost > n0.fCost) return -1;
+			return 0;
+		}
+	};
+	
+	private List<Player> players = new ArrayList<Player>();
 	
 	public ImageLoader glow = new ImageLoader("/textures/appearance/Glow.png",
 			"/textures/appearance/Glow_alpha.png", 144, 144);
@@ -59,6 +74,9 @@ public class Level {
 		for (int i = 0; i < particles.size(); i++) {
 			particles.get(i).update();
 		}
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).update();
+		}
 		remove();
 	}
 	
@@ -71,6 +89,9 @@ public class Level {
 		}
 		for (int i = 0; i < particles.size(); i++) {
 			if (particles.get(i).isRemoved()) particles.remove(i);
+		}
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).isRemoved()) players.remove(i);
 		}
 	}
 
@@ -122,6 +143,9 @@ public class Level {
 		for (int i = 0; i < particles.size(); i++) {
 			particles.get(i).render(screen);
 		}
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).render(screen);
+		}
 	}
 	
 	public void renderParticles(int xScroll, int yScroll, Screen screen) {
@@ -157,11 +181,131 @@ public class Level {
 			particles.add((Particle) e);
 		} else if (e instanceof Projectile) {
 			projectiles.add((Projectile) e);
+		} else if (e instanceof Player) {
+			players.add((Player) e);
 		} else {
-			entities.add(e);			
+			entities.add(e);				
 		}
 	}
 
+	public List<Player> getPlayers() {
+		return players;
+	}
+	
+	public Player getPlayerAt(int index) {
+		return players.get(index);
+	}
+	
+	public Player getClientPlayer() {
+		return players.get(0);
+	}
+	
+	// A* Search algorithm
+	public List<Node> findPath(Vector2i start, Vector2i goal) {
+		List<Node> openList = new ArrayList<Node>(); //Tiles considering moving to
+		List<Node> closedList = new ArrayList<Node>(); //Tiles not to move to
+		Node current = new Node(start, null, 0, getDistance(start, goal)); //Place to start for alrogithm
+		openList.add(current);
+		//While there's a path, keep calculating
+		while (openList.size() > 0) { 
+			//Sorts the list based on whether nodeSorter is +1 or -1
+			Collections.sort(openList, nodeSorter); //Sorts in order from lowest fcost to highest fcost
+			current = openList.get(0); //returns the very first node
+			//if the place we're checking is the finish, then stop checking
+			if (current.tile.equals(goal)) {
+				List<Node> path = new ArrayList<Node>();
+				while (current.parent != null) {
+					//Retracing steps from finish to start
+					path.add(current);
+					current = current.parent;
+				}
+				openList.clear();
+				closedList.clear();
+				return path;
+			}
+			openList.remove(current);
+			closedList.add(current); //Not looking at tile you were just on (that would be pointless)
+			//Check every single adjacency
+			for (int i = 0; i < 9; i++) {
+				if (i == 4) continue;
+				int x = current.tile.getX();
+				int y = current.tile.getY();
+				
+				//selects the current neighbor
+				int xi = (i % 3) - 1;
+				int yi = (i / 3) - 1;
+				Tile at = getTile(x + xi, y + yi);
+				if (at == null) continue;
+				if (at.solid()) continue;
+				if (at.isHarmful()) continue;
+				Vector2i a = new Vector2i(x + xi, y + yi);
+				double gCost = current.gCost + getDistance(current.tile, a);
+				double hCost = getDistance(a, goal);
+				Node node = new Node(a, current, gCost, hCost);
+				//Has tile already been visited
+				if (vecInList(closedList, a) && gCost >= node.gCost) continue;
+				if (!vecInList(openList, a) || gCost < node.gCost) openList.add(node);
+			}
+		}
+		closedList.clear();
+		return null;
+	}
+	
+	//Checks if a vector is in a list of nodes
+	private boolean vecInList(List<Node> list, Vector2i vector) {
+		for (Node n : list) {
+			if (n.tile.equals(vector)) return true;
+		}
+		return true;
+	}
+	
+	//Calculates the distance between two vectors
+	private double getDistance(Vector2i tile, Vector2i goal) {
+		double dx = tile.getX() - goal.getX();
+		double dy = tile.getY() - goal.getY();
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+	
+	//Finds entities in range
+	public List<Entity> getEntities(Entity e, int radius) {
+		List<Entity> result = new ArrayList<Entity>();
+		int ex = (int) e.getX();
+		int ey = (int) e.getY();
+		for (int i = 0; i < entities.size(); i++) {
+			Entity entity = entities.get(i);
+			int x = (int) entity.getX();
+			int y = (int)entity.getY();
+			
+			//Pathagorean theorem to find distance
+			int dx = Math.abs(x - ex);
+			int dy = Math.abs(y - ey);
+			double distance = Math.sqrt((dx * dx) + (dy * dy));
+			if (distance <= radius) result.add(entity);
+		}
+		return result;
+	}
+	
+	public List<Player> getPlayers(Entity e, int radius) {
+		List<Player> result = new ArrayList<Player>();
+		int ex = (int) e.getX();
+		int ey = (int) e.getY();
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			int x = (int) player.getX();
+			int y = (int) player.getY();
+			
+			//Pathagorean theorem to find distance
+			int dx = Math.abs(x - ex);
+			int dy = Math.abs(y - ey);
+			double distance = Math.sqrt((dx * dx) + (dy * dy));
+			if (distance <= radius) result.add(player);
+			if (entities.get(i) instanceof Player) {
+				result.add((Player) entities.get(i));
+			}
+		}
+		return result;
+	}
+	
 	// Renders specific tiles
 	public Tile getTile(int x, int y) {
 		// If you get outside the map boundaries it returns a voidTile

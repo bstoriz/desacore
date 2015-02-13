@@ -7,7 +7,7 @@ import pstoriz.desacore.graphics.Sprite;
 
 public abstract class Projectile extends Entity {
 	
-	protected final int xOrigin, yOrigin;
+	protected final double xOrigin, yOrigin;
 	protected double angle;
 	protected Sprite sprite;
 	protected double nx, ny; //change each update
@@ -16,7 +16,7 @@ public abstract class Projectile extends Entity {
 	protected final Random r = new Random();
 	protected char lvl; //How powerful the projectile is
 	
-	public Projectile(int x, int y, int dir) {
+	public Projectile(double x, double y, int dir) {
 		xOrigin = x;
 		yOrigin = y;
 		angle = dir;

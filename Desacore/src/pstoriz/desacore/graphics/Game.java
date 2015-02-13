@@ -17,12 +17,10 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import pstoriz.desacore.Screen;
-import pstoriz.desacore.input.Mouse;
 import pstoriz.desacore.entity.mob.Player;
 import pstoriz.desacore.entity.mob.player.Skill;
-import pstoriz.desacore.entity.spawner.ParticleSpawner;
-import pstoriz.desacore.graphics.ImageLoader;
 import pstoriz.desacore.input.Keyboard;
+import pstoriz.desacore.input.Mouse;
 import pstoriz.desacore.level.Level;
 import pstoriz.desacore.level.SpawnLevel;
 import pstoriz.desacore.level.TileCoordinate;
@@ -84,7 +82,7 @@ public class Game extends Canvas implements Runnable {
 		TileCoordinate playerSpawn = new TileCoordinate(level.getWidth() / 2,
 				level.getHeight() / 2 - 5);
 		player = new Player(playerSpawn.x(), playerSpawn.y(), key);
-		player.init(level);
+		level.add(player);
 
 		// timers
 		wait = 180;
@@ -174,7 +172,6 @@ public class Game extends Canvas implements Runnable {
 	// Updates the code only once ever so often
 	public void update() {
 		key.update();
-		player.update();
 		level.update();
 		ammoUpdate();
 		player.setPowerLVL(power.getLVL());
@@ -208,13 +205,11 @@ public class Game extends Canvas implements Runnable {
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 
 		// Horizontal and Vertical position of Player
-		int xScroll = player.x - screen.width / 2;
-		int yScroll = player.y - screen.height / 2;
-		level.render(xScroll, yScroll, screen);
-		// screen.renderSprite(0, 0, Sprite.playerShadow, false);
-		player.render(screen);
-		
-		renderAbove(xScroll, yScroll);
+		double xScroll = player.getX() - screen.width / 2;
+		double yScroll = player.getY() - screen.height / 2;
+		level.render((int) xScroll, (int) yScroll, screen);
+		// screen.renderSprite(0, 0, Sprite.playerShadow, false);		
+		renderAbove((int) xScroll, (int) yScroll);
 
 		// Sprite sprite = new Sprite(16, 16, 0xff);
 		Sprite wall = new Sprite(16, 1, 1, SpriteSheet.tiles);
@@ -307,8 +302,8 @@ public class Game extends Canvas implements Runnable {
 		Color infoCol = new Color(0xddffffff, true);
 		g.setColor(infoCol);
 		g.setFont(new Font("Minecraftia", 0, 35));
-		g.drawString("X: " + ((player.x / 16) - (level.getWidth() / 2))
-				+ ", Y: " + ((player.y / 16) - (level.getHeight() / 2) + 1),
+		g.drawString("X: " + ((player.getX() / 16) - (level.getWidth() / 2))
+				+ ", Y: " + ((player.getY() / 16) - (level.getHeight() / 2) + 1),
 				20, 50);
 		drawXPStats(g, 20, 90, 20);
 	}

@@ -3,7 +3,6 @@ package pstoriz.desacore.entity.projectile;
 import pstoriz.desacore.Screen;
 import pstoriz.desacore.entity.mob.Mob;
 import pstoriz.desacore.entity.spawner.ParticleSpawner;
-import pstoriz.desacore.entity.spawner.Spawner;
 import pstoriz.desacore.graphics.Sprite;
 
 
@@ -15,7 +14,7 @@ public class FireDProjectile extends Projectile {
 	public static final int ROUND_CAP = 10;
 	public static final int RELOAD_TIME = 100;
 	
-	public FireDProjectile(int x, int y, int dir) {
+	public FireDProjectile(double x, double y, int dir) {
 		super(x, y, dir);
 		range = (r.nextDouble() * 10) + 200;
 		speed = (r.nextDouble() * 2) + 3;
@@ -67,7 +66,7 @@ public class FireDProjectile extends Projectile {
 	}
 
 	public void render(Screen screen) {
-		screen.renderProjectile(x, y, this);
+		screen.renderProjectile((int) x, (int) y, this);
 		
 	}
 

@@ -1,7 +1,5 @@
 package pstoriz.desacore.entity.particle;
 
-import java.awt.Color;
-
 import pstoriz.desacore.Screen;
 import pstoriz.desacore.entity.Entity;
 import pstoriz.desacore.graphics.Sprite;

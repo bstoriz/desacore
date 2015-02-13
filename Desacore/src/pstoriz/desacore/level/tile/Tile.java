@@ -5,7 +5,6 @@ import pstoriz.desacore.graphics.Sprite;
 
 public class Tile {
 
-	public int x, y;
 	public Sprite sprite;
 		
 	public static Tile stoneRan = new StoneRanTile(Sprite.stoneRan);

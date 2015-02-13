@@ -15,11 +15,9 @@ public class Player extends Mob {
 
 	private Keyboard input;
 	private Sprite sprite;
-	private int anim = 0;
 	private int hanim = 0;
 	private int count = 0;
 	private int ranDmgWidth, ranDmgHeight;
-	private boolean walking = false;
 	
 	// -- adding animated sprites --
 	private AnimatedSprite down = new AnimatedSprite(SpriteSheet.player_down, 32, 32, 3);
@@ -41,7 +39,7 @@ public class Player extends Mob {
 	public int justReloaded = 0;
 	public int reloadTime, reloadSpeed;
 	public double fireRateLog;
-	private int xa, ya;
+	private double xa, ya;
 
 	public Player(Keyboard input) {
 		this.input = input;
@@ -71,10 +69,10 @@ public class Player extends Mob {
 		hp = health + healthLVL * 5;
 	}
 
-	public void update() {
+	public void update() {		
 		if (walking) {
 			if (input.shift) {
-				animSprite.setFrameRate(5);
+				animSprite.setFrameRate(4);
 			} else {
 				animSprite.setFrameRate(7);
 			}
@@ -85,38 +83,26 @@ public class Player extends Mob {
 		if (fireRate > 0) fireRateLog--;
 		xa = 0;
 		ya = 0;
-
-		if (anim < 7500)
-			anim++;
-		else
-			anim = 0;
-
+		double speed = 1.5;
+		if (slow) speed -= .6;
+		if (input.shift) speed *= 1.5;
 		// moves player
 		// if shift is held the player moves faster
 		if (input.up) {
 			animSprite = up;
-			if (input.shift) ya--;
-			if (slow) ya++;
-			ya--;
+			ya -= speed;
 		} else if (input.down) {
 			animSprite = down;
-			if (input.shift) ya++;
-			if (slow) ya--;
-			ya++;
+			ya += speed;
 		}
 		if (input.left) {
 			animSprite = left;
-			if (input.shift) xa--;
-			if (slow) xa++;
-			xa--;
+			xa -= speed;
 		} else if (input.right) {
 			animSprite = right;
-			if (input.shift) xa++;
-			if (slow) xa--;
-			xa++;
+			xa += speed;
 		}
-
-
+		
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -137,7 +123,7 @@ public class Player extends Mob {
 		if (harmful && health > 0) {
 			if (hanim % speed == 0) {
 				// Emits a blood particle for the damage
-				level.add(new ParticleSpawner(x, y, 40,
+				level.add(new ParticleSpawner((int) x,(int) y, 40,
 						 dmg, level, Sprite.particle_blood));
 				health -= r.nextInt(15) + 5;
 				dmg = prehealth - health;
@@ -179,7 +165,7 @@ public class Player extends Mob {
 	public void updateShooting() {
 		if (input.space && fireRate <= 0 && ammo > 0) {
 			int dir = this.dir;
-			playerShoot(x - 8, y, dir);
+			playerShoot((int) (x - 8), (int) y, dir);
 			powerXP = powerXP + r.nextInt(5) + 1;
 			ammo--;
 			justReloaded = 0;
@@ -209,7 +195,7 @@ public class Player extends Mob {
 
 	public void render(Screen screen) {
 		sprite = animSprite.getSprite();
-		screen.renderPlayer(x - 16, y - 16, sprite);
+		screen.renderPlayer((int) (x - 16), (int) (y - 16), sprite);
 	}
 	
 	public double getFireRate() {
