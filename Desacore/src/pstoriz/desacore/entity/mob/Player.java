@@ -125,7 +125,7 @@ public class Player extends Mob {
 			if (hanim % speed == 0) {
 				// Emits a blood particle for the damage
 				level.add(new ParticleSpawner((int) x,(int) y, 40,
-						 dmg, level, Sprite.particle_blood));
+						 dmg * 20, level, Sprite.particle_blood));
 				health -= r.nextInt(15) + 5;
 				dmg = prehealth - health;
 				ranDmgWidth = r.nextInt(100) - 50;
