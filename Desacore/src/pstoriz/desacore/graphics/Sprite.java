@@ -58,6 +58,8 @@ public class Sprite {
 	public static Sprite particle_normal = new Sprite(3, fire.getRGB());
 	public static Color blood = new Color(0xAD0000);
 	public static Sprite particle_blood = new Sprite(2, blood.getRGB());
+	public static Color waterCol = new Color(0x22A2F2);
+	public static Sprite particle_water = new Sprite(2, waterCol.getRGB());
 	
 	public static Sprite playerShadow = new Sprite(144, SpriteSheet.playerShadow);
 	

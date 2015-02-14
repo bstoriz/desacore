@@ -85,6 +85,7 @@ public class Player extends Mob {
 		ya = 0;
 		double speed = 1.5;
 		if (slow) speed -= .6;
+		if (splash) level.add(new ParticleSpawner((int) x, (int) y, 20, 2, level, Sprite.particle_water));
 		if (input.shift) speed *= 1.5;
 		// moves player
 		// if shift is held the player moves faster

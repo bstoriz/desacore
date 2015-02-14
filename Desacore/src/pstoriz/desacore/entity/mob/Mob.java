@@ -15,6 +15,7 @@ public abstract class Mob extends Entity {
 	protected boolean slow = false;
 	protected boolean alive = true;
 	protected boolean walking = false;
+	protected boolean splash = false;
 	
 	protected enum Direction {
 		UP, DOWN, LEFT, RIGHT
@@ -109,6 +110,7 @@ public abstract class Mob extends Entity {
 		for (int c = 0; c < 4; c++) {
 			harmful = false;
 			slow = false;
+			splash = false;
 			double xt = ((x + xa) - c % 2 * 16) / 16;
 			double yt = ((y + ya) - c / 2 * 16) / 16;
 			int ix = (int) Math.ceil(xt);
@@ -118,6 +120,8 @@ public abstract class Mob extends Entity {
 			if (level.getTile(ix, iy).solid()) solid = true;
 			if (level.getTile(ix, iy).isHarmful()) harmful = true;
 			if (level.getTile(ix, iy).isSlow()) slow = true;
+			if (level.getTile(ix, iy).water()) splash = true;
+
 
 		}
 		return solid;

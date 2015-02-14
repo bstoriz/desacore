@@ -16,5 +16,9 @@ public class Water extends Tile {
 	public boolean isSlow() {
 		return true;
 	}
+	
+	public boolean water() {
+		return true;
+	}
 
 }

@@ -77,4 +77,8 @@ public class Tile {
 	public boolean isSlow() {
 		return false;
 	}
+	
+	public boolean water() {
+		return false;
+	}
 }
