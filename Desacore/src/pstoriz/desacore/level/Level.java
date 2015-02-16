@@ -204,6 +204,7 @@ public class Level {
 	public List<Node> findPath(Vector2i start, Vector2i goal) {
 		List<Node> openList = new ArrayList<Node>(); //Tiles considering moving to
 		List<Node> closedList = new ArrayList<Node>(); //Tiles not to move to
+		Tile check = null;
 		Node current = new Node(start, null, 0, getDistance(start, goal)); //Place to start for alrogithm
 		openList.add(current);
 		//While there's a path, keep calculating
@@ -236,10 +237,23 @@ public class Level {
 				int yi = (i / 3) - 1;
 				Tile at = getTile(x + xi, y + yi);
 				if (at == null) continue;
-				if (at.solid()) continue;
-				if (at.isHarmful()) continue;
+				if (at.solid()) {
+					if (i == 0 || i == 6) check = at;
+					continue;
+				}
+				if (at.isHarmful()) {
+					if (i == 0 || i == 6) check = at;
+					continue;
+				}
+				if (at.isSlow()) {
+					if (i == 0 || i == 6) check = at;
+					continue;
+				}
 				Vector2i a = new Vector2i(x + xi, y + yi);
-				double gCost = current.gCost + getDistance(current.tile, a);
+				double gCost = current.gCost + (getDistance(current.tile, a) == 1 ? 1 : 0.95); //adds 1 or 0.95
+				if (check != null) {
+					if (i == 1 || i == 7) gCost = 3.2;
+				}
 				double hCost = getDistance(a, goal);
 				Node node = new Node(a, current, gCost, hCost);
 				//Has tile already been visited
@@ -256,52 +270,42 @@ public class Level {
 		for (Node n : list) {
 			if (n.tile.equals(vector)) return true;
 		}
-		return true;
+		return false;
 	}
 	
 	//Calculates the distance between two vectors
-	private double getDistance(Vector2i tile, Vector2i goal) {
+	public double getDistance(Vector2i tile, Vector2i goal) {
 		double dx = tile.getX() - goal.getX();
 		double dy = tile.getY() - goal.getY();
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	//Finds entities in range
-	public List<Entity> getEntities(Entity e, int radius) {
-		List<Entity> result = new ArrayList<Entity>();
+	public ArrayList<Entity> getEntities(Entity e, int radius) {
+		ArrayList<Entity> result = new ArrayList<Entity>();
 		int ex = (int) e.getX();
 		int ey = (int) e.getY();
 		for (int i = 0; i < entities.size(); i++) {
-			Entity entity = entities.get(i);
-			int x = (int) entity.getX();
-			int y = (int)entity.getY();
-			
+			if (e.equals(entities.get(i))) continue;
+			double x = entities.get(i).getX();
+			double y = entities.get(i).getY();	
+			double distance = Math.hypot(x - ex, y - ey);
 			//Pathagorean theorem to find distance
-			int dx = Math.abs(x - ex);
-			int dy = Math.abs(y - ey);
-			double distance = Math.sqrt((dx * dx) + (dy * dy));
-			if (distance <= radius) result.add(entity);
+			if (distance <= radius) result.add(entities.get(i));
 		}
 		return result;
 	}
 	
 	public List<Player> getPlayers(Entity e, int radius) {
 		List<Player> result = new ArrayList<Player>();
-		int ex = (int) e.getX();
-		int ey = (int) e.getY();
-		for (int i = 0; i < players.size(); i++) {
-			Player player = players.get(i);
-			int x = (int) player.getX();
-			int y = (int) player.getY();
-			
+		double ex = e.getX();
+		double ey = e.getY();
+		for (Player p : players) {
+			double x = p.getX();
+			double y = p.getY();
 			//Pathagorean theorem to find distance
-			int dx = Math.abs(x - ex);
-			int dy = Math.abs(y - ey);
-			double distance = Math.sqrt((dx * dx) + (dy * dy));
-			if (distance <= radius) result.add(player);
-			if (entities.get(i) instanceof Player) {
-				result.add((Player) entities.get(i));
-			}
+			double distance = Math.hypot(x - ex, y - ey);
+			if (distance <= radius) result.add(p);
 		}
 		return result;
 	}

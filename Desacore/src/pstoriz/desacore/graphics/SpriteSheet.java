@@ -34,7 +34,12 @@ public class SpriteSheet {
 	public static SpriteSheet bandit_up = new SpriteSheet(bandit, 0, 0, 1, 3, 32);
 	public static SpriteSheet bandit_left = new SpriteSheet(bandit, 3, 0, 1, 3, 32);
 	public static SpriteSheet bandit_right = new SpriteSheet(bandit, 1, 0, 1, 3, 32);
-
+	
+	public static SpriteSheet star = new SpriteSheet("/textures/bandit_spritesheet_2.png", 128, 96);
+	public static SpriteSheet star_down = new SpriteSheet(star, 2, 0, 1, 3, 32);
+	public static SpriteSheet star_up = new SpriteSheet(star, 0, 0, 1, 3, 32);
+	public static SpriteSheet star_left = new SpriteSheet(star, 3, 0, 1, 3, 32);
+	public static SpriteSheet star_right = new SpriteSheet(star, 1, 0, 1, 3, 32);
 	
 	
 	private Sprite[] sprites;

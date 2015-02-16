@@ -24,24 +24,25 @@ public class Bandit extends Mob {
 	public Bandit(int x, int y, int level) {
 		this.x = x << 4;
 		this.y = y << 4;
+		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
 		Tlvl = level;
 		sprite = Sprite.bandit;
 	}
 	
 	private void move() {
-		xa = 0;
-		ya = 0;
-		timer++;
 		//Chases the player
-		List<Player> players = level.getPlayers(this, 80);
+		List<Player> players = level.getPlayers(this, 50);
 		
 		if (players.size() > 0) {
+			xa = 0;
+			ya = 0;
 			Player player = players.get(0);
-			if (x < player.getX()) xa += speed;
-			if (x > player.getX()) xa -= speed;
-			if (y < player.getY()) ya += speed;
-			if (y > player.getY()) ya -= speed;
+			if (x < player.getX()) xa++;
+			if (x > player.getX()) xa--;
+			if (y < player.getY()) ya++;
+			if (y > player.getY()) ya--;
 		} else {
+			timer++;
 			// time % 60 is once per second
 			if (timer % (random.nextInt(50) + 30) == 0) {
 				//changes his direction
@@ -56,13 +57,6 @@ public class Bandit extends Mob {
 		}
 		
 		if (timer > 10000) timer = 0;
-		
-		if (xa != 0 || ya != 0) {
-			move(xa, ya);
-			walking = true;
-		} else {
-			walking = false;
-		}
 	}
 	
 	public void update() {
@@ -82,6 +76,13 @@ public class Bandit extends Mob {
 		} else if (xa > 0) {
 			animSprite = right;
 			direction = Direction.RIGHT;
+		}
+		if (xa != 0 || ya != 0) {
+			move(xa, 0);
+			move(0, ya);
+			walking = true;
+		} else {
+			walking = false;
 		}
 	}
 

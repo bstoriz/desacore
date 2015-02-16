@@ -30,6 +30,8 @@ public abstract class Mob extends Entity {
 	
 	public int ammo, round, Tlvl, health, prehealth;
 	public boolean noReload = false;
+	protected int hbXmul, hbYmul;
+	protected int hbXmod, hbYmod;
 	
 	//x and y variables need to change when it moves
 	public void move(double xa, double ya) {
@@ -111,8 +113,8 @@ public abstract class Mob extends Entity {
 			harmful = false;
 			slow = false;
 			splash = false;
-			double xt = ((x + xa) - c % 2 * 16) / 16;
-			double yt = ((y + ya) - c / 2 * 16) / 16;
+			int xt = (int) ((x + xa) - c % hbXmul + hbXmod) / 16;
+			int yt = (int) ((y + ya) - c / 2 * hbYmul + hbYmod) / 16;
 			int ix = (int) Math.ceil(xt);
 			int iy = (int) Math.ceil(yt);
 			if (c % 2 == 0) ix --;

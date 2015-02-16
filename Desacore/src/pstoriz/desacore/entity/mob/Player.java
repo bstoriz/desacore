@@ -51,6 +51,7 @@ public class Player extends Mob {
 		this.x = x;
 		this.y = y;
 		this.input = input;
+		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
 		fireRate = FireDProjectile.FIRE_RATE;
 		ammoCap = FireDProjectile.AMMO_CAP;
 		ammo = ammoCap;

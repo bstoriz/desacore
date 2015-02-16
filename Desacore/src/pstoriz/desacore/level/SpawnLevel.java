@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import pstoriz.desacore.entity.mob.Bandit;
+import pstoriz.desacore.entity.mob.Star;
 import pstoriz.desacore.entity.mob.WiseMan;
 
 public class SpawnLevel extends Level {
@@ -28,6 +29,7 @@ public class SpawnLevel extends Level {
 		}
 		add(new Bandit(height / 2, width / 2, 1));
 		add(new WiseMan(height / 2, width / 2));
+		add(new Star((height / 2) + 10, width / 2, 1));
 	}
 
 	

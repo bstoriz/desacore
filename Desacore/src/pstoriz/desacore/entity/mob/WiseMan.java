@@ -21,6 +21,7 @@ public class WiseMan extends Mob {
 	public WiseMan(int x, int y) {
 		this.x = x << 4;
 		this.y = y << 4;
+		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
 		sprite = Sprite.wiseMan;
 	}
 	
