@@ -26,7 +26,7 @@ public class Star extends Mob {
 	private double ya = 0;
 	private List<Node> path = null;
 	private double speed = 1.1;
-	private int time = 0;
+	private int time, timer = 0;
 	Vector2i goal = new Vector2i(200, 200);
 
 	public Star(int x, int y, int level) {
@@ -35,13 +35,21 @@ public class Star extends Mob {
 		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
 		Tlvl = level;
 		sprite = Sprite.star;
+		health = 100 + (int) (Tlvl * 1.1);
+		range = 128;
 	}
 
 	private void move() {
 		xa = 0;
 		ya = 0;
-		List<Player> players = level.getPlayers(this, 64);
+		speed = .5;
+		range = 128;
+		alerted = false;
+		List<Player> players = level.getPlayers(this, range);
 		if (players.size() > 0) {
+			alerted = true;
+			range = 256;
+			speed = 1.1;
 			int px = (int) level.getPlayerAt(0).getX(); // player's location
 			int py = (int) level.getPlayerAt(0).getY();
 			Vector2i start = new Vector2i((int) getX() >> 4, (int) getY() >> 4);
@@ -64,7 +72,18 @@ public class Star extends Mob {
 		} else {
 			xa = 0;
 			ya = 0;
-			//move randomly
+			timer++;
+			// time % 60 is once per second
+			if (timer % (random.nextInt(50) + 30) == 0) {
+				//changes his direction
+				xa += (random.nextInt(3) - 1) * speed;
+				ya += (random.nextInt(3) - 1) * speed;
+				if (random.nextInt(1) == 0) {
+					xa = 0;
+					ya = 0;
+				}
+			}
+			if (timer > 10000) timer = 0;
 		}
 		if (xa != 0 || ya != 0) {
 			move(xa, 0);

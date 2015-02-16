@@ -28,8 +28,8 @@ public abstract class Mob extends Entity {
 	public final static int DOWN = 2;
 	public final static int LEFT = 3;
 	
-	public int ammo, round, Tlvl, health, prehealth;
-	public boolean noReload = false;
+	public int ammo, round, Tlvl, health, prehealth, range;
+	public boolean noReload, alerted = false;
 	protected int hbXmul, hbYmul;
 	protected int hbXmod, hbYmod;
 	

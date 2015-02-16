@@ -27,27 +27,32 @@ public class Bandit extends Mob {
 		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
 		Tlvl = level;
 		sprite = Sprite.bandit;
+		health = 100 + (int) (Tlvl * 1.1);
+		range = 64;
 	}
 	
 	private void move() {
 		//Chases the player
-		List<Player> players = level.getPlayers(this, 50);
-		
+		range = 64;
+		List<Player> players = level.getPlayers(this, range);
+		speed = .5;
 		if (players.size() > 0) {
+			range = 128;
+			speed = 1.1;
 			xa = 0;
 			ya = 0;
 			Player player = players.get(0);
-			if (x < player.getX()) xa++;
-			if (x > player.getX()) xa--;
-			if (y < player.getY()) ya++;
-			if (y > player.getY()) ya--;
+			if (x < player.getX()) xa += speed;
+			if (x > player.getX()) xa -= speed;
+			if (y < player.getY()) ya += speed;
+			if (y > player.getY()) ya -= speed;
 		} else {
 			timer++;
 			// time % 60 is once per second
 			if (timer % (random.nextInt(50) + 30) == 0) {
 				//changes his direction
-				xa += random.nextInt(3) - 1;
-				ya += random.nextInt(3) - 1;
+				xa += (random.nextInt(3) - 1) * speed;
+				ya += (random.nextInt(3) - 1) * speed;
 				if (random.nextInt(2) == 0) {
 					xa = 0;
 					ya = 0;
