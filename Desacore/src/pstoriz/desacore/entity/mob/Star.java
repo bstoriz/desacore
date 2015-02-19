@@ -58,14 +58,14 @@ public class Star extends Mob {
 			if (path != null) {
 				if (path.size() > 0) {
 					Vector2i vec = path.get(path.size() - 1).tile;
-					if (x < vec.getX() << 4)
+					if ((int) x < vec.getX() << 4)
 						xa += speed; // if the location we need to move to is to the
 								// right then move that way
-					if (x > vec.getX() << 4)
+					if ((int) x > vec.getX() << 4)
 						xa -= speed;
-					if (y < vec.getY() << 4)
+					if ((int) y < vec.getY() << 4)
 						ya += speed;
-					if (y > vec.getY() << 4)
+					if ((int) y > vec.getY() << 4)
 						ya -= speed;
 				}
 			}
@@ -110,10 +110,10 @@ public class Star extends Mob {
 		}
 		if (xa < 0) {
 			animSprite = left;
-			direction = Direction.LEFT;
+			direction = Direction.LEFT;				
 		} else if (xa > 0) {
 			animSprite = right;
-			direction = Direction.RIGHT;
+			direction = Direction.RIGHT;				
 		}
 		move();
 	}
@@ -121,6 +121,7 @@ public class Star extends Mob {
 	public void render(Screen screen) {
 		sprite = animSprite.getSprite();
 		screen.renderMob((int) (x - 16), (int) (y - 16), sprite);
+		
 	}
 
 }

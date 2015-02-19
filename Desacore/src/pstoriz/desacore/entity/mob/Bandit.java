@@ -42,10 +42,10 @@ public class Bandit extends Mob {
 			xa = 0;
 			ya = 0;
 			Player player = players.get(0);
-			if (x < player.getX()) xa += speed;
-			if (x > player.getX()) xa -= speed;
-			if (y < player.getY()) ya += speed;
-			if (y > player.getY()) ya -= speed;
+			if ((int) x < (int) player.getX()) xa += speed;
+			if ((int) x > (int) player.getX()) xa -= speed;
+			if ((int) y < (int) player.getY()) ya += speed;
+			if ((int) y > (int) player.getY()) ya -= speed;
 		} else {
 			timer++;
 			// time % 60 is once per second
