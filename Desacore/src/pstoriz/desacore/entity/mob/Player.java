@@ -3,13 +3,15 @@ package pstoriz.desacore.entity.mob;
 import java.util.Random;
 
 import pstoriz.desacore.Screen;
-import pstoriz.desacore.entity.projectile.FireDProjectile;
+import pstoriz.desacore.entity.projectile.FireProjectile;
 import pstoriz.desacore.entity.projectile.Projectile;
 import pstoriz.desacore.entity.spawner.ParticleSpawner;
 import pstoriz.desacore.graphics.AnimatedSprite;
+import pstoriz.desacore.graphics.Game;
 import pstoriz.desacore.graphics.Sprite;
 import pstoriz.desacore.graphics.SpriteSheet;
 import pstoriz.desacore.input.Keyboard;
+import pstoriz.desacore.input.Mouse;
 
 public class Player extends Mob {
 
@@ -40,6 +42,7 @@ public class Player extends Mob {
 	public int reloadTime, reloadSpeed;
 	public double fireRateLog;
 	private double xa, ya;
+	private char lvl;
 
 	public Player(Keyboard input) {
 		this.input = input;
@@ -52,16 +55,17 @@ public class Player extends Mob {
 		this.y = y;
 		this.input = input;
 		hbXmul = 13; hbXmod = 7; hbYmul = 15; hbYmod = 15;
-		fireRate = FireDProjectile.FIRE_RATE;
-		ammoCap = FireDProjectile.AMMO_CAP;
+		fireRate = FireProjectile.FIRE_RATE;
+		ammoCap = FireProjectile.AMMO_CAP;
 		ammo = ammoCap;
-		roundCap = FireDProjectile.ROUND_CAP;
+		roundCap = FireProjectile.ROUND_CAP;
 		round = roundCap;
-		reloadTime = FireDProjectile.RELOAD_TIME;
+		reloadTime = FireProjectile.RELOAD_TIME;
 		fireRateLog = reloadTime;
 		powerXP = 0;
 		reloadXP = 0;
 		Tlvl = 1;
+		lvl = 'D';
 		reloadSpeed = 1;
 		powerLVL = 1;
 		healthLVL = 1;
@@ -80,6 +84,7 @@ public class Player extends Mob {
 			animSprite.update();
 		}
 		else animSprite.setFrame(0);
+		if (powerLVL == 2) lvl = 'C';
 		if (fireRate > 0) fireRate--;
 		if (fireRate > 0) fireRateLog--;
 		xa = 0;
@@ -104,6 +109,7 @@ public class Player extends Mob {
 			animSprite = right;
 			xa += speed;
 		}
+		 
 		
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
@@ -165,14 +171,23 @@ public class Player extends Mob {
 	}
 
 	public void updateShooting() {
-		if (input.space && fireRate <= 0 && ammo > 0) {
-			int dir = this.dir;
-			playerShoot((int) (x - 8), (int) y, dir);
-			powerXP = powerXP + r.nextInt(5) + 1;
-			ammo--;
-			justReloaded = 0;
-			noReload = false;
-			fireRate = FireDProjectile.FIRE_RATE / (1 + powerLVL / 10.0);
+		if (lvl == 'D') {
+			if (input.space && fireRate <= 0 && ammo > 0) {
+				int dir = (int) this.dir;
+				playerShoot((int) (x - 8), (int) y, dir, lvl);
+				powerXP = powerXP + r.nextInt(5) + 1;
+				ammo--;
+				justReloaded = 0;
+				noReload = false;
+				fireRate = FireProjectile.FIRE_RATE / (1 + powerLVL / 10.0);
+			}
+		} else {
+			if (Mouse.getButton() == 1) {
+				double dx = Mouse.getX() - (Game.getWindowWidth() / 2);
+				double dy = Mouse.getY() - (Game.getWindowHeight() / 2);
+				double dir = Math.atan2(dy, dx);
+				shoot(x, y, dir);
+			}
 		}
 	}
 	

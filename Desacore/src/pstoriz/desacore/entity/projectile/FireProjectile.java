@@ -7,40 +7,45 @@ import pstoriz.desacore.graphics.Sprite;
 
 
 //For the FireProjectile class
-public class FireDProjectile extends Projectile {
+public class FireProjectile extends Projectile {
 
 	public static final double FIRE_RATE = 20; //Higher is slower
 	public static final int AMMO_CAP = 10;
 	public static final int ROUND_CAP = 10;
 	public static final int RELOAD_TIME = 100;
 	
-	public FireDProjectile(double x, double y, int dir) {
+	public FireProjectile(double x, double y, double dir, char lvl) {
 		super(x, y, dir);
 		range = (r.nextDouble() * 10) + 200;
 		speed = (r.nextDouble() * 2) + 3;
 		damage = 20;
 		sprite = Sprite.projectile_fire_d;
-		lvl = 'D';
+		this.lvl = lvl;
 		
 		//shoots the projectile the same way the player is facing
-		if (dir == Mob.UP) {
-			nx = 0;
-			ny = speed * -1;
-		}
-		
-		if (dir == Mob.DOWN) {
-			nx = 0;
-			ny = speed;
-		}
-		
-		if (dir == Mob.RIGHT) {
-			nx = speed;
-			ny = 0;
-		}
-		
-		if (dir == Mob.LEFT) {
-			nx = speed * -1;
-			ny = 0;
+		if (lvl == 'D') {
+			if (dir == Mob.UP) {
+				nx = 0;
+				ny = speed * -1;
+			}
+			
+			if (dir == Mob.DOWN) {
+				nx = 0;
+				ny = speed;
+			}
+			
+			if (dir == Mob.RIGHT) {
+				nx = speed;
+				ny = 0;
+			}
+			
+			if (dir == Mob.LEFT) {
+				nx = speed * -1;
+				ny = 0;
+			}
+		} else {
+			nx = speed * Math.cos(angle);
+			ny = speed * Math.sin(angle);
 		}
 		
 	}
