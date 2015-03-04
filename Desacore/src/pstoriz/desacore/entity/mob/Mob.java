@@ -2,14 +2,14 @@ package pstoriz.desacore.entity.mob;
 
 import pstoriz.desacore.Screen;
 import pstoriz.desacore.entity.Entity;
-import pstoriz.desacore.entity.projectile.FireProjectile;
+import pstoriz.desacore.entity.projectile.FireDProjectile;
 import pstoriz.desacore.entity.projectile.Projectile;
 import pstoriz.desacore.graphics.Sprite;
 
 public abstract class Mob extends Entity {
 	
 	protected Sprite sprite;
-	protected double dir = 2;
+	protected int dir = 2;
 	protected boolean moving = false;
 	protected boolean harmful = false;
 	protected boolean slow = false;
@@ -19,10 +19,6 @@ public abstract class Mob extends Entity {
 	
 	protected enum Direction {
 		UP, DOWN, LEFT, RIGHT
-	}
-	
-	protected enum Behavior {
-		FRIENDLY, AGRESSIVE, NEUTRAL
 	}
 	
 	protected Direction direction;
@@ -105,14 +101,8 @@ public abstract class Mob extends Entity {
 	
 	public abstract void render(Screen screen);
 	
-	protected void shoot(double x, double y, double dir) {
-		//dir *= 180 / Math.PI;
-		Projectile p = new FireProjectile(x, y, dir, 'C');
-		level.add(p);
-	}
-	
-	protected void playerShoot(double x, double y, double dir, char lvl) {
-		Projectile p = new FireProjectile(x, y, (int) dir, lvl);
+	protected void playerShoot(double x, double y, int dir) {
+		Projectile p = new FireDProjectile(x, y, this.dir);
 		level.add(p);
 	}
 	

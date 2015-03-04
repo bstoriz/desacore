@@ -2,16 +2,11 @@ package pstoriz.desacore.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import pstoriz.desacore.graphics.Slot;
 
 public class Keyboard implements KeyListener{
 	
 	private boolean[] keys = new boolean[120];
 	public boolean up, down, left, right, shift, space, info, r;
-	public List<Slot> slots = new ArrayList<Slot>();
 	public boolean etoggle = false;
 	
 	public static final int E = KeyEvent.VK_E;
@@ -26,7 +21,6 @@ public class Keyboard implements KeyListener{
 		space = keys[KeyEvent.VK_SPACE];
 		info = keys[KeyEvent.VK_CONTROL];
 		r = keys[KeyEvent.VK_R];
-		
 		
 		//Scans through each key
 		for (int i = 0; i < keys.length; i++) {
