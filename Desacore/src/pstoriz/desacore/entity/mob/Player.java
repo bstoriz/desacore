@@ -182,11 +182,16 @@ public class Player extends Mob {
 				fireRate = FireProjectile.FIRE_RATE / (1 + powerLVL / 10.0);
 			}
 		} else {
-			if (Mouse.getButton() == 1) {
+			if (Mouse.getButton() == 1 && fireRate <= 0 && ammo > 0) {
 				double dx = Mouse.getX() - (Game.getWindowWidth() / 2);
 				double dy = Mouse.getY() - (Game.getWindowHeight() / 2);
 				double dir = Math.atan2(dy, dx);
 				shoot(x, y, dir);
+				powerXP = powerXP + r.nextInt(5) + 1;
+				ammo--;
+				justReloaded = 0;
+				noReload = false;
+				fireRate = FireProjectile.FIRE_RATE / (1 + powerLVL / 10.0);
 			}
 		}
 	}
@@ -208,6 +213,12 @@ public class Player extends Mob {
 			fireRate = speed;
 			fireRateLog = speed;
 		}
+	}
+	
+	public double getDistance(double x, double y) {
+		double dx = Math.abs(this.x - x);
+		double dy = Math.abs(this.y - y);
+		return Math.sqrt(dx * dx + dy * dy) / 16;
 	}
 
 	public void render(Screen screen) {

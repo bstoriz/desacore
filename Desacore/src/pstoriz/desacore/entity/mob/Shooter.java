@@ -21,8 +21,7 @@ public class Shooter extends Mob {
 		double dx = p.getX() - x;
 		double dy = p.getY() - y;
 		double dir = Math.atan2(dy, dx);
-		if (time % 60 == 0) shoot(x + 5, y + 10, dir);
-		
+		if (time % 60 == 0 && p.getDistance(x, y) < 10) shoot(x + 5, y + 10, dir);		
 	}
 
 	//VISUAL
