@@ -12,6 +12,7 @@ import pstoriz.desacore.entity.mob.Player;
 import pstoriz.desacore.entity.particle.Particle;
 import pstoriz.desacore.entity.projectile.Projectile;
 import pstoriz.desacore.graphics.ImageLoader;
+import pstoriz.desacore.graphics.Slot;
 import pstoriz.desacore.level.tile.Tile;
 import pstoriz.desacore.util.Vector2i;
 

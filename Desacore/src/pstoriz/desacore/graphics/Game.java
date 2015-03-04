@@ -302,8 +302,8 @@ public class Game extends Canvas implements Runnable {
 		Color infoCol = new Color(0xddffffff, true);
 		g.setColor(infoCol);
 		g.setFont(new Font("Minecraftia", 0, 35));
-		g.drawString("X: " + ((player.getX() / 16) - (level.getWidth() / 2))
-				+ ", Y: " + ((player.getY() / 16) - (level.getHeight() / 2) + 1),
+		g.drawString("X: " + ((int) (player.getX() / 16) - (level.getWidth() / 2))
+				+ ", Y: " + ((int) (player.getY() / 16) - (level.getHeight() / 2) + 1),
 				20, 50);
 		drawXPStats(g, 20, 90, 20);
 	}

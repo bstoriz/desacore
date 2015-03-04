@@ -16,7 +16,7 @@ public abstract class Projectile extends Entity {
 	protected final Random r = new Random();
 	protected char lvl; //How powerful the projectile is
 	
-	public Projectile(double x, double y, int dir) {
+	public Projectile(double x, double y, double dir) {
 		xOrigin = x;
 		yOrigin = y;
 		angle = dir;
@@ -34,5 +34,9 @@ public abstract class Projectile extends Entity {
 	
 	protected void move() {
 		
+	}
+	
+	public char getLVL() {
+		return lvl;
 	}
 }
