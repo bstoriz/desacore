@@ -156,7 +156,7 @@ public class Level {
 		}
 	}
 
-	// Seperate render method for the Above Tile
+	// Separate render method for the Above Tile
 	public void renderAbove(int xScroll, int yScroll, Screen screen, Tile tile) {
 		screen.setOffset(xScroll, yScroll);
 		// renders all the tiles until it hits the end of the screen
@@ -330,6 +330,8 @@ public class Level {
 			return Tile.water;
 		if (tiles[x + y * width] == Tile.col_lava)
 			return Tile.lava;
+		if (tiles[x + y * width] == Tile.col_wool)
+			return Tile.wool;
 		if (tiles[x + y * width] == Tile.col_wall)
 			return Tile.wall;
 		if (tiles[x + y * width] == Tile.col_wallAbove)

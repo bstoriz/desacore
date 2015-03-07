@@ -31,6 +31,7 @@ public class Sprite {
 	public static Sprite water = new Sprite(16, 3, 0, SpriteSheet.tiles);
 	public static Sprite lava = new Sprite(16, 4, 0, SpriteSheet.tiles);
 	public static Sprite wood = new Sprite(16, 3, 1, SpriteSheet.tiles);
+	public static Sprite wool = new Sprite(16, 4, 1, SpriteSheet.tiles);
 	public static Sprite voidSprite = new Sprite(16, 0);
 	
 	public static Sprite player_up = new Sprite(32, 0, 5, SpriteSheet.tiles);

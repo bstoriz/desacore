@@ -25,6 +25,7 @@ public class Tile {
 	public static Tile water = new Water(Sprite.water);
 	public static Tile lava = new Lava(Sprite.lava);
 	public static Tile wood = new Wood(Sprite.wood);
+	public static Tile wool = new Wool(Sprite.wool);
 	
 	public static Tile voidTile = new voidTile(Sprite.voidSprite);
 	
@@ -35,6 +36,7 @@ public class Tile {
 	public static final int col_wood = 0xff988945;
 	public static final int col_water = 0xff00a8ff;
 	public static final int col_lava = 0xffff7200;
+	public static final int col_wool = 0xc00000;
 	public static final int col_wall = 0xff000000;
 	public static final int col_wallLeft= 0xff132114;
 	public static final int col_wallRight = 0xff352137;
