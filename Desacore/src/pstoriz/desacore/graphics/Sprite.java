@@ -51,6 +51,7 @@ public class Sprite {
 	public static Sprite wiseMan = new Sprite(32, 0, 0, SpriteSheet.wiseMan_down);
 	public static Sprite bandit = new Sprite(32, 0, 0, SpriteSheet.bandit_down);
 	public static Sprite star = new Sprite(32, 0, 0, SpriteSheet.star_down);
+	public static Sprite shooter = new Sprite(32, 0, 0, SpriteSheet.shooter_down);
 	
 	//Projectiles
 	public static Sprite projectile_fire_d = new Sprite(16, 0, 0, SpriteSheet.projectiles);

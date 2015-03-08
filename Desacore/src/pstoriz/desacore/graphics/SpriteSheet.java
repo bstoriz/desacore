@@ -41,6 +41,12 @@ public class SpriteSheet {
 	public static SpriteSheet star_left = new SpriteSheet(star, 3, 0, 1, 3, 32);
 	public static SpriteSheet star_right = new SpriteSheet(star, 1, 0, 1, 3, 32);
 	
+	public static SpriteSheet shooter = new SpriteSheet("/textures/shooter_spritesheet.png", 128, 96);
+	public static SpriteSheet shooter_down = new SpriteSheet(shooter, 2, 0, 1, 3, 32);
+	public static SpriteSheet shooter_up = new SpriteSheet(shooter, 0, 0, 1, 3, 32);
+	public static SpriteSheet shooter_left = new SpriteSheet(shooter, 3, 0, 1, 3, 32);
+	public static SpriteSheet shooter_right = new SpriteSheet(shooter, 1, 0, 1, 3, 32);
+	
 	
 	private Sprite[] sprites;
 	
