@@ -34,10 +34,21 @@ public class Shooter extends Mob {
 	public void update() {
 		time++;
 		Player p = level.getClientPlayer();
-		double dx = p.getX() - x;
-		double dy = p.getY() - y;
+		if (p.getX() < 0 && p.getY() > 0 || p.getX() > 0 && p.getY() < 0) {
+			shoot(p, 32, 0);
+		}
+		else if (p.getX() == 0 || p.getY() == 0) {
+			shoot(p, 16, 16);
+		}
+		shoot(p, 0, 0);
+	}
+	
+	//SHOOT FIREBALL
+	public void shoot(Player target, int changeX, int changeY) {
+		double dx = target.getX() - x;
+		double dy = target.getY() - y;
 		double dir = Math.atan2(dy, dx);
-		if (time % 60 == 0 && p.getDistance(x, y) < 10) shoot(x + 5, y + 10, dir);
+		if (time % 60 == 0 && target.getDistance(x, y) < 10) shoot(x - changeX, y - changeY , dir);
 	}
 
 	//VISUAL
